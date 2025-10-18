@@ -1,0 +1,108 @@
+{
+  "collections": {
+    "users": {
+      "fields": {
+        "userId": "string",
+        "email": "string", 
+        "role": "string",
+        "profile": "object",
+        "addresses": "array",
+        "createdAt": "timestamp",
+        "updatedAt": "timestamp"
+      },
+      "indexes": [
+        {"fields": ["email"], "unique": true},
+        {"fields": ["role", "createdAt"]}
+      ]
+    },
+    "merchants": {
+      "fields": {
+        "merchantId": "string",
+        "userId": "string",
+        "businessName": "string",
+        "status": "string",
+        "rating": "number",
+        "createdAt": "timestamp"
+      },
+      "indexes": [
+        {"fields": ["status", "rating"]},
+        {"fields": ["userId"], "unique": true}
+      ]
+    },
+    "products": {
+      "fields": {
+        "productId": "string",
+        "merchantId": "string",
+        "name": "string",
+        "category": "string",
+        "tags": "array",
+        "price": "number",
+        "status": "string",
+        "rating": "number",
+        "createdAt": "timestamp"
+      },
+      "indexes": [
+        {"fields": ["merchantId", "status"]},
+        {"fields": ["tags", "price"]},
+        {"fields": ["category", "rating"]}
+      ]
+    },
+    "orders": {
+      "fields": {
+        "orderId": "string",
+        "userId": "string", 
+        "merchantId": "string",
+        "status": "string",
+        "totalAmount": "number",
+        "createdAt": "timestamp"
+      },
+      "indexes": [
+        {"fields": ["userId", "createdAt"]},
+        {"fields": ["merchantId", "status"]}
+      ]
+    },
+    "reviews": {
+      "fields": {
+        "reviewId": "string",
+        "userId": "string",
+        "productId": "string",
+        "rating": "number",
+        "status": "string",
+        "createdAt": "timestamp"
+      },
+      "indexes": [
+        {"fields": ["productId", "rating"]},
+        {"fields": ["userId", "createdAt"]}
+      ]
+    },
+    "promotions": {
+      "fields": {
+        "promotionId": "string",
+        "merchantId": "string",
+        "type": "string",
+        "code": "string",
+        "active": "boolean",
+        "startDate": "timestamp",
+        "endDate": "timestamp"
+      },
+      "indexes": [
+        {"fields": ["active", "startDate", "endDate"]},
+        {"fields": ["code"], "unique": true}
+      ]
+    }
+  },
+  "subcollections": {
+    "merchants/{merchantId}/products": {
+      "purpose": "Snapshots para analytics"
+    },
+    "orders/{orderId}/items": {
+      "purpose": "Items con snapshots de productos"
+    },
+    "orders/{orderId}/events": {
+      "purpose": "Tracking de estado de órdenes"
+    },
+    "products/{productId}/reviews": {
+      "purpose": "Consultas rápidas de reviews"
+    }
+  }
+}
